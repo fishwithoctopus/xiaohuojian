@@ -16,18 +16,20 @@ export function checkCrisis(text: string): { detected: boolean; message: string 
   return null;
 }
 
-async function callAI(type: string, content: string) {
+async function callAI(type: string, content: string, temperature?: number) {
+  const body: Record<string, unknown> = { type, content };
+  if (temperature !== undefined) body.temperature = temperature;
   const res = await fetch("/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ type, content }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error(`AI request failed: ${res.status}`);
   return res.json();
 }
 
-export async function aiRestate(userText: string): Promise<string> {
-  const data = await callAI("restate", userText);
+export async function aiRestate(userText: string, retry = false): Promise<string> {
+  const data = await callAI("restate", userText, retry ? 1.2 : undefined);
   return data.summary ?? "";
 }
 

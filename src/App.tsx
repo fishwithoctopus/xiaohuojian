@@ -921,7 +921,7 @@ function ScanScreen({
               setAiReady(false);
               setScanProgress(0);
               setTypedLength(0);
-              aiRestate(sourceText)
+              aiRestate(sourceText, true)
                 .then((s) => { setAiSummary(s || makeMockAiSummary(sourceText)); setAiReady(true); })
                 .catch(() => { setAiSummary(makeMockAiSummary(sourceText)); setAiReady(true); });
             }}

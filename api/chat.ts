@@ -18,7 +18,7 @@ const SYSTEM_PROMPTS: Record<string, string> = {
     '针对以下用户无法控制的焦虑因素，给一句温暖的话解释为什么可以放下（不超过25字）。语气温暖但不鸡汤，不要空洞鼓励。只返回JSON，格式：{"analysis":[{"label":"碎片","comfort":"一句话"},...]}'  ,
 
   summarize:
-    '基于用户这次焦虑拆解的全过程，写三句诗意的总结。要求：温暖收尾，不说教，每句不超过15字，有画面感。只返回JSON，格式：{"lines":["第一句","第二句","第三句"]}',
+    '基于用户这次焦虑拆解的全过程，写三句诗意的总结。要求：温暖收尾，不说教，有画面感。三句话长短要有变化——比如一句短（5-7字）、一句中等（8-12字）、一句稍长（10-15字），顺序随意，避免三句字数相同。只返回JSON，格式：{"lines":["第一句","第二句","第三句"]}',
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -26,7 +26,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { type, content } = req.body as { type: string; content: string };
+  const { type, content, temperature: customTemp } = req.body as { type: string; content: string; temperature?: number };
 
   const systemPrompt = SYSTEM_PROMPTS[type];
   if (!systemPrompt) {
@@ -52,7 +52,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           { role: "user", content },
         ],
         response_format: { type: "json_object" },
-        temperature: 0.7,
+        temperature: typeof customTemp === "number" ? customTemp : 0.7,
       }),
     });
 
