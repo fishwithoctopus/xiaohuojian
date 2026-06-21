@@ -334,7 +334,7 @@ export function App() {
         onConfirm={(finalSummary: string) => {
           audio.play("click");
           setScanPhase("exit");
-          aiSplit(finalSummary)
+          aiSplit(`原始描述：${worryText}\nAI总结：${finalSummary}`)
             .then((frags) => setAiFragments(frags.length ? frags : ASSEMBLY_PIECES.map((p) => p.label)))
             .catch(() => setAiFragments(ASSEMBLY_PIECES.map((p) => p.label)));
           window.setTimeout(() => {

@@ -2894,8 +2894,9 @@ button {
 /* ── Tutorial overlay ── */
 
 .tutorial-overlay {
-  position: absolute;
-  inset: 0;
+  position: fixed;
+  inset: -200px;
+  padding: 200px;
   z-index: 30;
   background: rgba(0, 0, 0, 0.55);
   display: flex;
