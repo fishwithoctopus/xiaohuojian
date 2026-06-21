@@ -2895,10 +2895,10 @@ button {
 
 .tutorial-overlay {
   position: fixed;
-  inset: -200px;
-  padding: 200px;
+  inset: 0;
   z-index: 30;
   background: rgba(0, 0, 0, 0.55);
+  box-shadow: 0 0 0 200px rgba(0, 0, 0, 0.55);
   display: flex;
   flex-direction: column;
   align-items: center;
