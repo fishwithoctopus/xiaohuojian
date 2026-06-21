@@ -621,23 +621,13 @@ button {
   width: 300px;
   height: 215px;
   z-index: 5;
-  cursor: pointer;
+  pointer-events: none;
   transform-origin: 50% 4%;
   animation: paper-unroll 850ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .phase-stow .paper-button {
   animation: paper-stow 560ms ease forwards;
-}
-
-.paper-submit-zone {
-  left: 50%;
-  top: 508px;
-  width: 300px;
-  height: 48px;
-  margin-left: -150px;
-  z-index: 10;
-  cursor: pointer;
 }
 
 .paper-scroll {
@@ -757,24 +747,77 @@ button {
   animation: input-fade 320ms ease 420ms both;
 }
 
-.write-tip {
+.write-actions {
+  position: absolute;
   left: 0;
-  top: 604px;
+  bottom: 10%;
   width: 100%;
-  margin: 0;
   z-index: 5;
-  color: #0c1014;
-  font-family: "Fusion Pixel", "Courier New", monospace;
-  font-size: 16px;
-  line-height: 1;
-  letter-spacing: 0;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
   animation: input-fade 320ms ease 500ms both;
 }
 
+.write-action {
+  width: 52px;
+  height: 52px;
+}
+
+.write-action img {
+  width: 100%;
+  height: 100%;
+}
+
+.write-edit-layer {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.write-edit-panel {
+  background: #f5f0e8;
+  border: 3px solid #3a4a5c;
+  border-radius: 12px;
+  padding: 16px;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.write-edit-input {
+  width: 100%;
+  min-height: 120px;
+  border: 2px solid #c5bba8;
+  border-radius: 8px;
+  padding: 10px;
+  font-family: "Fusion Pixel", "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #0c1014;
+  background: #fff;
+  resize: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.write-edit-input:focus {
+  border-color: #3a4a5c;
+}
+
+.write-edit-save {
+  align-self: center;
+  background: #3a4a5c;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 32px;
+  font-family: "Fusion Pixel", "Courier New", monospace;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 .phase-stow .write-pen,
-.phase-stow .write-prompt,
-.phase-stow .write-tip,
+.phase-stow .write-actions,
 .phase-stow .paper-type-area {
   animation: none;
   opacity: 0;
@@ -2955,6 +2998,21 @@ button {
   margin: 0;
   position: absolute;
   bottom: 40px;
+}
+
+/* P2 tutorial hint positions */
+.hint-write-main {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.hint-write-btns {
+  position: absolute;
+  bottom: calc(10% + 60px);
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* P3 tutorial hint positions */

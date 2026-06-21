@@ -305,6 +305,8 @@ export function App() {
         text={worryText}
         onTextChange={setWorryText}
         audio={audio}
+        showTutorial={!tutorialSeen["write"]}
+        onDismissTutorial={() => setTutorialSeen((prev) => ({ ...prev, write: true }))}
       />
       {crisisInfo && (
         <div className="modal-layer crisis-layer" onClick={() => setCrisisInfo(null)}>
@@ -599,6 +601,8 @@ function WriteScreen({
   phase,
   text,
   audio,
+  showTutorial,
+  onDismissTutorial,
 }: {
   onOpenCapsule: () => void;
   onSubmit: () => void;
@@ -606,8 +610,13 @@ function WriteScreen({
   phase: WritePhase;
   text: string;
   audio: AudioManager;
+  showTutorial: boolean;
+  onDismissTutorial: () => void;
 }) {
   const typingStarted = useRef(false);
+  const [isEditingWrite, setIsEditingWrite] = useState(false);
+  const [editDraft, setEditDraft] = useState(text);
+  const editInputRef = useRef<HTMLTextAreaElement>(null);
   const handleTextChange = (val: string) => {
     if (!typingStarted.current && val.length > 0) {
       audio.play("typing", { loop: true, volume: 0.3 });
@@ -618,6 +627,17 @@ function WriteScreen({
       typingStarted.current = false;
     }
     onTextChange(val);
+  };
+  const openEdit = () => {
+    setEditDraft(text);
+    setIsEditingWrite(true);
+    setTimeout(() => editInputRef.current?.focus(), 50);
+  };
+  const saveEdit = () => {
+    if (editDraft.trim()) {
+      onTextChange(editDraft.trim());
+    }
+    setIsEditingWrite(false);
   };
   const isPaperVisible = phase === "write";
   const paperLines = buildPaperLines(text);
@@ -660,15 +680,9 @@ function WriteScreen({
         </button>
 
         {isPaperVisible && (
-          <button
-            className="paper-button"
-            type="button"
-            aria-label="Put paper back into capsule"
-            onClick={onSubmit}
-            onPointerUp={onSubmit}
-          >
+          <div className="paper-button">
             <img className="paper-scroll" src="/assets/p2/paper-open.svg" alt="" />
-          </button>
+          </div>
         )}
 
         {isPaperVisible && (
@@ -699,25 +713,36 @@ function WriteScreen({
         )}
 
         {isPaperVisible && (
-          <button
-            className="paper-submit-zone"
-            type="button"
-            aria-label="Put paper back into capsule"
-            onClick={onSubmit}
-            onPointerUp={onSubmit}
-          />
-        )}
-
-        {isPaperVisible && (
           <>
             <img className="write-pen" src="/assets/p2/pen.svg" alt="" />
-            <img
-              className="write-prompt"
-              src="/assets/p2/write-your-anxiety.svg"
-              alt="Write your anxiety"
-            />
-            <p className="write-tip">写完点击纸张收起</p>
+            <div className="write-actions">
+              <button className="asset-button write-action pressable" type="button" aria-label="Edit" onClick={openEdit}>
+                <img src="/assets/p3/edit-button.svg" alt="" />
+              </button>
+              <button className="asset-button write-action pressable" type="button" aria-label="Confirm" onClick={() => { if (text.trim()) onSubmit(); }}>
+                <img src="/assets/p3/confirm-button.svg" alt="" />
+              </button>
+            </div>
           </>
+        )}
+
+        {showTutorial && isPaperVisible && (
+          <div className="tutorial-overlay" onClick={onDismissTutorial}>
+            <div className="tutorial-hint hint-write-main"><p>写下你的焦虑</p></div>
+            <div className="tutorial-hint hint-write-btns">
+              <p>修改　　确认</p>
+            </div>
+            <p className="tutorial-dismiss">点击任意处关闭</p>
+          </div>
+        )}
+
+        {isEditingWrite && (
+          <div className="modal-layer write-edit-layer" onClick={saveEdit}>
+            <div className="write-edit-panel" onClick={(e) => e.stopPropagation()}>
+              <textarea ref={editInputRef} className="write-edit-input" value={editDraft} onChange={(e) => setEditDraft(e.target.value)} />
+              <button className="write-edit-save pressable" type="button" onClick={saveEdit}>确认</button>
+            </div>
+          </div>
         )}
       </section>
     </main>
