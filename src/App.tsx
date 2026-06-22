@@ -7,15 +7,15 @@ const BGM_LOOP_END = 47;
 const BGM_VOLUME = 0.2;
 
 const SFX_FILES = {
-  click: "/assets/audio/click.wav",
-  launch: "/assets/audio/起飞.wav",
-  capsuleDrop: "/assets/audio/舱体掉落.wav",
-  unroll: "/assets/audio/展开.wav",
+  click: "/assets/audio/click.mp3",
+  launch: "/assets/audio/起飞.mp3",
+  capsuleDrop: "/assets/audio/舱体掉落.mp3",
+  unroll: "/assets/audio/展开.mp3",
   typing: "/assets/audio/循环打字.mp3",
   scan: "/assets/audio/扫描.mp3",
   conveyor: "/assets/audio/传送带底噪.mp3",
   assemble: "/assets/audio/安装火箭.mp3",
-  rocketBurst: "/assets/audio/火箭窜一下.wav",
+  rocketBurst: "/assets/audio/火箭窜一下.mp3",
 } as const;
 
 type SfxName = keyof typeof SFX_FILES;
